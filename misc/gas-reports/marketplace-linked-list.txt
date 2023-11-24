@@ -1,0 +1,7 @@
+| contracts/Marketplace.sol:Marketplace contract |                 |        |        |        |         |
+|------------------------------------------------|-----------------|--------|--------|--------|---------|
+| Deployment Cost                                | Deployment Size |        |        |        |         |
+| 3108830                                        | 16626           |        |        |        |         |
+| Function Name                                  | min             | avg    | median | max    | # calls |
+| bid                                            | 101799          | 118003 | 118114 | 118114 | 200     |
+| startSale                                      | 103808          | 103808 | 103808 | 103808 | 1       |

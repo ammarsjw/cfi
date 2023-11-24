@@ -1,0 +1,96 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CFI
+    network: goerli
+    source:
+      address: "0xc506A3dc972CC5F1f779Ac261E795511067Ad61d"
+      abi: CFI
+      startBlock: 10076664
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CFISetBaseURI
+      abis:
+        - name: CFI
+          file: ./abis/CFI.json
+      eventHandlers:
+        - event: SetBaseURI(string,string)
+          handler: handleSetBaseURI
+      file: ./src/cfi.ts
+  - kind: ethereum
+    name: CFIPublic
+    network: goerli
+    source:
+      address: "0x8301Cd43264Dc8E1D0385dF25e614cfCCc791b4D"
+      abi: CFIPublic
+      startBlock: 10076665
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CFIPublicSetBaseURI
+        - CFIPublicSetTokenURI
+        - CFIPublicTag
+      abis:
+        - name: CFIPublic
+          file: ./abis/CFIPublic.json
+      eventHandlers:
+        - event: SetBaseURI(string,string)
+          handler: handleSetBaseURI
+        - event: SetTokenURI(string,string)
+          handler: handleSetTokenURI
+        - event: Tag(uint256,string)
+          handler: handleTag
+      file: ./src/cfi-public.ts
+  - kind: ethereum
+    name: Marketplace
+    network: goerli
+    source:
+      address: "0xeA6fA019ac006535F994046c7e57457e03d1bF59"
+      abi: Marketplace
+      startBlock: 10099125
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AuctionAcceptBid
+        - AuctionBid
+        - AuctionCancelBid
+        - EndSale
+        - SaleBuy
+        - StartSale
+        - UpdateAllowedToken
+        - UpdateListing
+        - UpdateTreasuryWallet
+        - Bid
+        - Sale
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: AuctionAcceptBid(address,uint256,int256)
+          handler: handleAuctionAcceptBid
+        - event: AuctionBid(address,uint256,int256,address,uint256)
+          handler: handleAuctionBid
+        - event: AuctionCancelBid(address,uint256,int256)
+          handler: handleAuctionCancelBid
+        - event: EndSale(address,uint256)
+          handler: handleEndSale
+        - event: SaleBuy(address,uint256,address,uint256,address)
+          handler: handleSaleBuy
+        - event: StartSale(address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleStartSale
+        - event: UpdateAllowedToken(address,address)
+          handler: handleUpdateAllowedToken
+        - event: UpdateListing(address,uint256,address)
+          handler: handleUpdateListing
+        - event: UpdateTreasuryWallet(address,address)
+          handler: handleUpdateTreasuryWallet
+      file: ./src/marketplace.ts

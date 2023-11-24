@@ -1,0 +1,163 @@
+# ========== Custom ========== #
+
+# Marketplace
+type Bid @entity(immutable: false) {
+    id: ID!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    index: BigInt! # int256
+    bidder: Bytes! # address
+    amountToken: BigInt! # uint256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# Marketplace
+type Sale @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    buyer: Bytes! # address
+    amountToken: BigInt! # uint256
+    token: Bytes! # address
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# ========== CFI ========== #
+
+type CFISetBaseURI @entity(immutable: true) {
+    id: Bytes!
+    newBaseURI: String! # string
+    oldBaseURI: String! # string
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# ========== CFIPublic ========== #
+
+type CFIPublicSetBaseURI @entity(immutable: true) {
+    id: Bytes!
+    newBaseURI: String! # string
+    oldBaseURI: String! # string
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type CFIPublicSetTokenURI @entity(immutable: true) {
+    id: Bytes!
+    newTokenURI: String! # string
+    oldTokenURI: String! # string
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type CFIPublicTag @entity(immutable: true) {
+    id: Bytes!
+    tokenId: BigInt! # uint256
+    tag: String! # string
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# ========== Marketplace ========== #
+
+type AuctionAcceptBid @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    index: BigInt! # int256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type AuctionBid @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    index: BigInt! # int256
+    bidder: Bytes! # address
+    amountToken: BigInt! # uint256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type AuctionCancelBid @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    index: BigInt! # int256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type EndSale @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type SaleBuy @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    buyer: Bytes! # address
+    amountToken: BigInt! # uint256
+    token: Bytes! # address
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type StartSale @entity(immutable: true) {
+    id: Bytes!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    startTime: BigInt! # uint256
+    endTime: BigInt! # uint256
+    duration: BigInt! # uint256
+    price: BigInt! # uint256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type UpdateAllowedToken @entity(immutable: true) {
+    id: Bytes!
+    token: Bytes! # address
+    priceFeed: Bytes! # address
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type UpdateListing @entity(immutable: false) {
+    id: ID!
+    collection: Bytes! # address
+    startTime: BigInt! # uint256
+    token: Bytes! # address
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type UpdateTreasuryWallet @entity(immutable: true) {
+    id: Bytes!
+    newTreasuryWallet: Bytes! # address
+    oldTreasuryWallet: Bytes! # address
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
