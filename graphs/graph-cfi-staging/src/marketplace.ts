@@ -40,14 +40,15 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.save()
 
-    // {Bid} entity id
-    let bidEntityId = event.params.collection.toHexString()
+    // {Bid} entity id.
+    let bidEntityId =
+        event.params.collection.toHexString()
         .concat("-")
         .concat(event.params.tokenId.toString())
         .concat("-")
         .concat(event.params.index.toString())
 
-    // Load {Bid} entity
+    // Load {Bid} entity.
     let buyer = BYTES_ZERO
     let amountToken = BIGINT_ZERO
     let bidEntity = Bid.load(bidEntityId)
@@ -57,7 +58,7 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
         amountToken = bidEntity.amountToken
     }
 
-    // Load {UpdateListing} entity
+    // Load {UpdateListing} entity.
     let token = BYTES_ZERO
     let updateListingEntity = UpdateListing.load(event.params.collection.toString())
 
@@ -65,7 +66,7 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
         token = updateListingEntity.token
     }
 
-    // Create {Sale} entity
+    // Create {Sale} entity.
     let saleEntity = new Sale(event.transaction.hash.concatI32(event.logIndex.toI32()))
     saleEntity.collection = event.params.collection
     saleEntity.tokenId = event.params.tokenId
@@ -77,7 +78,7 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
     saleEntity.transactionHash = event.transaction.hash
     saleEntity.save()
 
-    // Remove {Bid} entity
+    // Remove {Bid} entity.
     store.remove("Bid", bidEntityId)
 }
 
@@ -95,7 +96,7 @@ export function handleAuctionBid(event: AuctionBidEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.save()
 
-    // Create {Bid} entity
+    // Create {Bid} entity.
     let bidEntity = new Bid(
         event.params.collection.toHexString()
             .concat("-")
@@ -126,7 +127,7 @@ export function handleAuctionCancelBid(event: AuctionCancelBidEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.save()
 
-    // Remove {Bid} entity
+    // Remove {Bid} entity.
     let bidEntityId = event.params.collection.toHexString()
         .concat("-")
         .concat(event.params.tokenId.toString())
@@ -162,7 +163,7 @@ export function handleSaleBuy(event: SaleBuyEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.save()
 
-    // Create {Sale} entity
+    // Create {Sale} entity.
     let saleEntity = new Sale(event.transaction.hash.concatI32(event.logIndex.toI32()))
     saleEntity.collection = event.params.collection
     saleEntity.tokenId = event.params.tokenId

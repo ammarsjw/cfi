@@ -1,7 +1,7 @@
 const hre = require("hardhat")
 
 async function main() {
-    // Chain dependent variables
+    // Chain dependent variables.
     const networkName = hre.network.name
     let desiredGasPrice, ownerAddress, initialSupply, governorAddress, tokens, priceFeeds, initialListings = []
 
@@ -30,59 +30,29 @@ async function main() {
     }
 
 
-    // Checking gas price
+    // Checking gas price.
     await checkGasPrice(desiredGasPrice)
     console.log("Chain:", networkName)
 
 
-    // Contracts
-    // Deploying CFI
-    const cfiContract = await hre.ethers.deployContract("CFI", [ownerAddress, initialSupply])
-    await cfiContract.waitForDeployment()
-    const cfiDeployTxHash = await cfiContract.deploymentTransaction().hash
-    const cfiDeployTx = await hre.ethers.provider.getTransactionReceipt(cfiDeployTxHash)
-    console.log("CFI deployed to:", cfiContract.target)
-    console.log("at block number:", cfiDeployTx.blockNumber)
-
-    // Deploying CFIPublic
-    const cfiPublicContract = await hre.ethers.deployContract("CFIPublic", [governorAddress])
-    await cfiPublicContract.waitForDeployment()
-    const cfiPublicDeployTxHash = await cfiPublicContract.deploymentTransaction().hash
-    const cfiPublicDeployTx = await hre.ethers.provider.getTransactionReceipt(cfiPublicDeployTxHash)
-    console.log("CFIPublic deployed to:", cfiPublicContract.target)
-    console.log("at block number:", cfiPublicDeployTx.blockNumber)
-
-
-    // Addresses
-    const cfiAddress = cfiContract.target
-    const cfiPublicAddress = cfiPublicContract.target
+    // Deploying collections and retrieving addresses.
+    const cfiAddress = await deploy("CFI", [ownerAddress, initialSupply])
+    const cfiPublicAddress = await deploy("CFIPublic", [governorAddress])
     // const cfiAddress = ""
     // const cfiPublicAddress = ""
 
 
-    // Initial listings
+    // Deployment dependent constructor arguments.
     initialListings.push(cfiAddress)
     initialListings.push(cfiPublicAddress)
 
 
-    // Deploying Marketplace
-    const marketplaceContract = await hre.ethers.deployContract(
-        "Marketplace",
-        [governorAddress, tokens, priceFeeds, initialListings]
-    )
-    await marketplaceContract.waitForDeployment()
-    const marketplaceDeployTxHash = await marketplaceContract.deploymentTransaction().hash
-    const marketplaceDeployTx = await hre.ethers.provider.getTransactionReceipt(marketplaceDeployTxHash)
-    console.log("Marketplace deployed to:", marketplaceContract.target)
-    console.log("at block number:", marketplaceDeployTx.blockNumber)
-
-
-    // Addresses
-    const marketplaceAddress = marketplaceContract.target
+    // Deploying contracts and retrieving addresses.
+    const marketplaceAddress = await deploy("Marketplace", [governorAddress, tokens, priceFeeds, initialListings])
     // const marketplaceAddress = ""
 
 
-    // Verifying contracts
+    // Verifying contracts.
     await new Promise(resolve => setTimeout(resolve, 20000))
     await verify(cfiAddress, [ownerAddress, initialSupply])
     await verify(cfiPublicAddress, [governorAddress])
@@ -103,6 +73,16 @@ async function checkGasPrice(desiredGasPrice) {
             console.log("Gas Price:", gasPrice, "Gwei")
         }
     }
+}
+
+async function deploy(contractToDeploy, constructorArguments) {
+    const contract = await hre.ethers.deployContract(contractToDeploy, constructorArguments)
+    await contract.waitForDeployment()
+    const contractAddress = contract.target
+    const deploymentBlockNumber = await contract.deploymentTransaction().blockNumber
+    console.log(`${contractToDeploy} deployed to:`, contractAddress)
+    console.log("at block number:", deploymentBlockNumber)
+    return contractAddress
 }
 
 async function verify(address, constructorArguments) {
