@@ -35,19 +35,19 @@ async function main() {
     console.log("Chain:", networkName)
 
 
-    // Deploying collections and retrieving addresses.
+    // Deploying collections.
     const cfiAddress = await deploy("CFI", [ownerAddress, initialSupply])
     const cfiPublicAddress = await deploy("CFIPublic", [governorAddress])
     // const cfiAddress = ""
     // const cfiPublicAddress = ""
 
 
-    // Deployment dependent constructor arguments.
+    // Deployment dependent variables.
     initialListings.push(cfiAddress)
     initialListings.push(cfiPublicAddress)
 
 
-    // Deploying contracts and retrieving addresses.
+    // Deploying contracts.
     const marketplaceAddress = await deploy("Marketplace", [governorAddress, tokens, priceFeeds, initialListings])
     // const marketplaceAddress = ""
 
