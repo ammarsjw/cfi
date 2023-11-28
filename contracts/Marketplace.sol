@@ -33,7 +33,7 @@ contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Rol
 
     /* ========== STATE VARIABLES ========== */
 
-    /// @dev Tokenized checksummed address used as an idenfifier for ETH.
+    /// @dev Tokenized checksummed address used as an identifier for ETH.
     IERC20 private constant _ETH = IERC20(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
     /// @notice Address of the Wrapped ETH token.
     address public immutable WETH;

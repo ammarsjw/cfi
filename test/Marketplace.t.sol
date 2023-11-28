@@ -72,22 +72,22 @@ contract MarketplaceTest is Test {
 
     /* ========== TESTS ========== */
 
-    function testMultiBids() public {
-        // Stacking multiple bids on a single NFT.
+    function testMultipleBids() public {
+        // Stacking multiple bids on a few NFTs.
         for (uint256 i = 0 ; i < 100 ; i++) {
-        // for (uint256 i = 0 ; i < 1 ; i++) {
             marketplace.bid(IERC721(address(cfi)), 1, (i + 1) * 1e18);
         }
         for (uint256 i = 0 ; i < 100 ; i++) {
-        // for (uint256 i = 0 ; i < 1 ; i++) {
             marketplace.bid(IERC721(address(cfi)), 2, (i + 1) * 1e18);
         }
     }
 
     function testSale() public {
-        // cfi.approve(address(marketplace), 1);
-        cfi.setApprovalForAll(address(marketplace), true);
-        console.log(cfi.isApprovedForAll(address(this), address(marketplace)));
+        // Approval method 1.
+        cfi.approve(address(marketplace), 1);
         marketplace.startSale(IERC721(address(cfi)), 1, 5000, 1000000000000000000);
+        // Approval method 2.
+        cfi.setApprovalForAll(address(marketplace), true);
+        marketplace.startSale(IERC721(address(cfi)), 2, 5000, 1000000000000000000);
     }
 }
