@@ -35,6 +35,11 @@ interface CFIPublicErrors is GenericErrorsV1, GenericErrorsV2 {
      * @param quantity Number of tokens being batch minted.
      */
     error InvalidMintQuantity(uint256 quantity, uint256 limit);
+
+    /**
+     * @dev Indicates an error if the given `tokenURI` is already in use.
+     */
+    error tokenURIAlreadyInUse();
 }
 
 /**

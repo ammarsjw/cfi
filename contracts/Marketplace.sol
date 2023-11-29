@@ -24,7 +24,7 @@ import { Roles } from "./utils/Roles.sol";
 /**
  * @title Marketplace.
  * @author CFI team.
- * @notice Marketplace to buy and sell NFTs.
+ * @notice CFI collections marketplace.
  */
 contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Roles {
     using Address for address payable;

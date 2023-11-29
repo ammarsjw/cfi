@@ -11,7 +11,7 @@ import { ICFIPublic } from "./interfaces/ICFIPublic.sol";
 import { Roles } from "./utils/Roles.sol";
 
 /**
- * @title CFIPublic.
+ * @title Crypto Financial Inc Public.
  * @author CFI team.
  * @notice Public CFI NFT collection.
  */
@@ -31,23 +31,39 @@ contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles 
 
     /* ========== STORAGE ========== */
 
+    /// @dev Mapping from `tokenId` to `tokenURI`.
     mapping (uint256 => string) private _tokenURI;
+    /// @dev Mapping from `tokenURI` to `tokenId`.
+    mapping (string => uint256) private _inUseBy;
 
     /* ========== CONSTRUCTOR ========== */
 
     /**
      * @dev Assigns all roles.
      * @param governor_ Address of the contract governor.
+     * @param baseURI_ Base URI for computing the {tokenURI}.
      */
-    constructor(address governor_) ERC721("Crypto Financial Inc Public", "CFIP") {
+    constructor(
+        address governor_,
+        string memory baseURI_
+    ) ERC721("Crypto Financial Inc Public", "CFIP") {
         _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
         _setRoleAdmin(GOVERNOR_ROLE, ADMIN_ROLE);
         _grantRole(GOVERNOR_ROLE, governor_);
         /// @dev Responsible for all roles.
         _grantRole(ADMIN_ROLE, governor_);
+
+        _setBaseURI(baseURI_);
     }
 
     /* ========== FUNCTIONS ========== */
+
+    /**
+     * @notice Returns the `tokenId` for the given `uri`.
+     */
+    function inUseBy(string memory uri) external view returns (uint256) {
+        return _inUseBy[uri];
+    }
 
     /**
      * @inheritdoc ERC721
@@ -83,9 +99,13 @@ contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles 
 
         if (newTokenURI.equal(oldTokenURI))
             revert IdenticalStringReassignment(newTokenURI, oldTokenURI);
+        if (_inUseBy[newTokenURI] != 0) revert tokenURIAlreadyInUse();
+
+        delete _inUseBy[oldTokenURI];
+        _inUseBy[newTokenURI] = tokenId;
+        _tokenURI[tokenId] = newTokenURI;
 
         emit SetTokenURI(newTokenURI, oldTokenURI);
-        _tokenURI[tokenId] = newTokenURI;
         return true;
     }
 
@@ -113,9 +133,16 @@ contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles 
         if (newBaseURI.equal(baseURI))
             revert IdenticalStringReassignment(newBaseURI, baseURI);
 
+        _setBaseURI(newBaseURI);
+        return true;
+    }
+
+    /**
+     * @dev Internal set base uri logic.
+     */
+    function _setBaseURI(string memory newBaseURI) internal {
         emit SetBaseURI(newBaseURI, baseURI);
         baseURI = newBaseURI;
-        return true;
     }
 
     /**
@@ -129,11 +156,13 @@ contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles 
         string memory uri,
         string memory tag
     ) external returns (bool) {
-        _totalSupply++;
-        _safeMint(to, _totalSupply);
-        _tokenURI[_totalSupply] = uri;
+        if (_inUseBy[uri] != 0) revert tokenURIAlreadyInUse();
+        uint256 tokenId = ++_totalSupply;
+        _safeMint(to, tokenId);
+        _inUseBy[uri] = tokenId;
+        _tokenURI[tokenId] = uri;
 
-        emit Tag(_totalSupply, tag);
+        emit Tag(tokenId, tag);
         return true;
     }
 
@@ -155,15 +184,17 @@ contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles 
             revert InvalidMintQuantity(quantity, MAX_MINT_BATCH_QUANTITY_LIMIT);
         if (quantity != uris.length || quantity != tags.length)
             revert ArgumentArityMismatch();
-        uint256 currentSupply = _totalSupply;
+        uint256 tokenId = _totalSupply;
         _totalSupply += quantity;
 
         for (uint256 i = 0 ; i < quantity ; i++) {
-            currentSupply++;
-            _safeMint(to, currentSupply);
-            _tokenURI[currentSupply] = uris[i];
+            if (_inUseBy[uris[i]] != 0) revert tokenURIAlreadyInUse();
+            tokenId++;
+            _safeMint(to, tokenId);
+            _inUseBy[uris[i]] = tokenId;
+            _tokenURI[tokenId] = uris[i];
 
-            emit Tag(currentSupply, tags[i]);
+            emit Tag(tokenId, tags[i]);
         }
         return true;
     }

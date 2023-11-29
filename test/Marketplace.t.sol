@@ -27,7 +27,9 @@ contract MarketplaceTest is Test {
     // Setup variables.
     address ownerAddress = address(this);
     uint256 initialSupply = 250;
+    string cfiBaseURI = "aaa";
     address governorAddress = address(1);
+    string cfiPublicBaseURI = "bbb";
     IERC20[] tokens;
     AggregatorV3Interface[] priceFeeds;
     IERC721[] initialListings;
@@ -43,8 +45,8 @@ contract MarketplaceTest is Test {
      * @dev Invoked before each test.
      */
     function setUp() public {
-        cfi = new CFI(ownerAddress, initialSupply);
-        cfiPublic = new CFIPublic(governorAddress);
+        cfi = new CFI(ownerAddress, initialSupply, cfiBaseURI);
+        cfiPublic = new CFIPublic(governorAddress, cfiPublicBaseURI);
         initialListings.push(IERC721(address(cfi)));
         initialListings.push(IERC721(address(cfiPublic)));
 

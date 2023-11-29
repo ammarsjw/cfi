@@ -25,6 +25,8 @@ interface ICFIPublic {
 
     function baseURI() external view returns (string memory);
 
+    function inUseBy(string memory uri) external view returns (uint256);
+
     function setBaseURI(string memory newBaseURI) external returns (bool);
 
     function totalSupply() external view returns (uint256);

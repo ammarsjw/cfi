@@ -3,30 +3,39 @@ const hre = require("hardhat")
 async function main() {
     // Chain dependent variables.
     const networkName = hre.network.name
-    let desiredGasPrice, ownerAddress, initialSupply, governorAddress, tokens, priceFeeds, initialListings = []
+    let desiredGasPrice
+    let ownerAddress, initialSupply, cfiBaseURI
+    let governorAddress, cfiPublicBaseURI
+    let tokens, priceFeeds
 
     if (networkName == "goerli") {
         desiredGasPrice = 1
+
         ownerAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
         initialSupply = 250
+        cfiBaseURI = "ipfs://bafybeiemxfskgv4ykxkl4y7qvvxvklj564ffmft7ygvngr4o2sa3t3yu4i/"
+
         governorAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
+        cfiPublicBaseURI = "ipfs://aaa/"
+
         tokens = [
-            "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6" // WETH
+            "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"    // WETH
         ]
         priceFeeds = [
-            "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e" // WETH
+            "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"    // WETH
         ]
     } else if (networkName == "bsc") {
         desiredGasPrice = 3
+
         ownerAddress = ""
         initialSupply = 0
+        cfiBaseURI = "ipfs://aaa/"
+
         governorAddress = ""
-        tokens = [
-            "" // WBNB
-        ]
-        priceFeeds = [
-            "" // WBNB
-        ]
+        cfiPublicBaseURI = "ipfs://aaa/"
+
+        tokens = []
+        priceFeeds = []
     }
 
 
@@ -36,13 +45,14 @@ async function main() {
 
 
     // Deploying collections.
-    const cfiAddress = await deploy("CFI", [ownerAddress, initialSupply])
-    const cfiPublicAddress = await deploy("CFIPublic", [governorAddress])
+    const cfiAddress = await deploy("CFI", [ownerAddress, initialSupply, cfiBaseURI])
+    const cfiPublicAddress = await deploy("CFIPublic", [governorAddress, cfiPublicBaseURI])
     // const cfiAddress = ""
     // const cfiPublicAddress = ""
 
 
     // Deployment dependent variables.
+    let initialListings = []
     initialListings.push(cfiAddress)
     initialListings.push(cfiPublicAddress)
 
@@ -54,8 +64,8 @@ async function main() {
 
     // Verifying contracts.
     await new Promise(resolve => setTimeout(resolve, 20000))
-    await verify(cfiAddress, [ownerAddress, initialSupply])
-    await verify(cfiPublicAddress, [governorAddress])
+    await verify(cfiAddress, [ownerAddress, initialSupply, cfiBaseURI])
+    await verify(cfiPublicAddress, [governorAddress, cfiPublicBaseURI])
     await verify(marketplaceAddress, [governorAddress, tokens, priceFeeds, initialListings])
 
 

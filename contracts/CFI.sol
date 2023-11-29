@@ -13,9 +13,9 @@ import { ICFI } from "./interfaces/ICFI.sol";
 import { CFIRoles } from "./utils/Roles.sol";
 
 /**
- * @title CFI.
+ * @title Crypto Financial Inc.
  * @author CFI team.
- * @notice Primary CFI NFT collection.
+ * @notice CFI NFT collection.
  */
 contract CFI is AccessControl, ERC721A, GenericErrorsV1, ICFI, CFIRoles {
     using Strings for string;
@@ -31,16 +31,20 @@ contract CFI is AccessControl, ERC721A, GenericErrorsV1, ICFI, CFIRoles {
      * @dev Assigns all roles and mints initial supply.
      * @param owner_ Address of the contract owner.
      * @param initialSupply_ Amount of tokens to mint at contract creation.
+     * @param baseURI_ Base URI for computing the {tokenURI}.
      */
     constructor(
         address owner_,
-        uint256 initialSupply_
+        uint256 initialSupply_,
+        string memory baseURI_
     ) ERC721A("Crypto Financial Inc", "CFI") {
         _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
         _setRoleAdmin(OWNER_ROLE, ADMIN_ROLE);
         _grantRole(OWNER_ROLE, owner_);
         /// @dev Responsible for all roles.
         _grantRole(ADMIN_ROLE, owner_);
+
+        _setBaseURI(baseURI_);
 
         /// @dev To be used only in the constructor.
         _mintERC2309(owner_, initialSupply_);
@@ -79,9 +83,16 @@ contract CFI is AccessControl, ERC721A, GenericErrorsV1, ICFI, CFIRoles {
         if (newBaseURI.equal(baseURI))
             revert IdenticalStringReassignment(newBaseURI, baseURI);
 
+        _setBaseURI(newBaseURI);
+        return true;
+    }
+
+    /**
+     * @dev Internal set base uri logic.
+     */
+    function _setBaseURI(string memory newBaseURI) internal {
         emit SetBaseURI(newBaseURI, baseURI);
         baseURI = newBaseURI;
-        return true;
     }
 
     /**
