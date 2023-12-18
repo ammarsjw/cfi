@@ -14,6 +14,7 @@ import { Roles } from "./utils/Roles.sol";
  * @title Crypto Financial Inc Public.
  * @author CFI team.
  * @notice Public CFI NFT collection.
+ * @dev Includes a custom implementation of {ERC721URIStorage}.
  */
 contract CFIPublic is AccessControl, ERC721, CFIPublicErrors, ICFIPublic, Roles {
     using Strings for string;

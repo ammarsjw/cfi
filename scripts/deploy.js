@@ -13,7 +13,7 @@ async function main() {
 
         ownerAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
         initialSupply = 250
-        cfiBaseURI = "ipfs://bafybeiemxfskgv4ykxkl4y7qvvxvklj564ffmft7ygvngr4o2sa3t3yu4i/"
+        cfiBaseURI = "ipfs://aaa/"
 
         governorAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
         cfiPublicBaseURI = "ipfs://aaa/"
@@ -34,8 +34,12 @@ async function main() {
         governorAddress = ""
         cfiPublicBaseURI = "ipfs://aaa/"
 
-        tokens = []
-        priceFeeds = []
+        tokens = [
+            ""    // WBNB
+        ]
+        priceFeeds = [
+            ""    // WBNB
+        ]
     }
 
 
