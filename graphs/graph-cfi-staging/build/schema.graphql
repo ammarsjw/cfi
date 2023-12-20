@@ -1,7 +1,7 @@
 # ========== Custom ========== #
 
 # Marketplace
-type Bid @entity(immutable: false) {
+type BidHistory @entity(immutable: false) {
     id: ID!
     collection: Bytes! # address
     tokenId: BigInt! # uint256
@@ -14,7 +14,7 @@ type Bid @entity(immutable: false) {
 }
 
 # Marketplace
-type Sale @entity(immutable: true) {
+type SaleHistory @entity(immutable: true) {
     id: Bytes!
     collection: Bytes! # address
     tokenId: BigInt! # uint256

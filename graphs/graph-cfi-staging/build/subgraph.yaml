@@ -69,8 +69,8 @@ dataSources:
         - UpdateAllowedToken
         - UpdateListing
         - UpdateTreasuryWallet
-        - Bid
-        - Sale
+        - BidHistory
+        - SaleHistory
       abis:
         - name: Marketplace
           file: Marketplace\abis\Marketplace.json

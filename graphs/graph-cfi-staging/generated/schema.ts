@@ -11,7 +11,7 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class Bid extends Entity {
+export class BidHistory extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -19,22 +19,22 @@ export class Bid extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Bid entity without an ID");
+    assert(id != null, "Cannot save BidHistory entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type Bid must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type BidHistory must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Bid", id.toString(), this);
+      store.set("BidHistory", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: string): Bid | null {
-    return changetype<Bid | null>(store.get_in_block("Bid", id));
+  static loadInBlock(id: string): BidHistory | null {
+    return changetype<BidHistory | null>(store.get_in_block("BidHistory", id));
   }
 
-  static load(id: string): Bid | null {
-    return changetype<Bid | null>(store.get("Bid", id));
+  static load(id: string): BidHistory | null {
+    return changetype<BidHistory | null>(store.get("BidHistory", id));
   }
 
   get id(): string {
@@ -155,7 +155,7 @@ export class Bid extends Entity {
   }
 }
 
-export class Sale extends Entity {
+export class SaleHistory extends Entity {
   constructor(id: Bytes) {
     super();
     this.set("id", Value.fromBytes(id));
@@ -163,24 +163,26 @@ export class Sale extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Sale entity without an ID");
+    assert(id != null, "Cannot save SaleHistory entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type Sale must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type SaleHistory must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Sale", id.toBytes().toHexString(), this);
+      store.set("SaleHistory", id.toBytes().toHexString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): Sale | null {
-    return changetype<Sale | null>(
-      store.get_in_block("Sale", id.toHexString())
+  static loadInBlock(id: Bytes): SaleHistory | null {
+    return changetype<SaleHistory | null>(
+      store.get_in_block("SaleHistory", id.toHexString())
     );
   }
 
-  static load(id: Bytes): Sale | null {
-    return changetype<Sale | null>(store.get("Sale", id.toHexString()));
+  static load(id: Bytes): SaleHistory | null {
+    return changetype<SaleHistory | null>(
+      store.get("SaleHistory", id.toHexString())
+    );
   }
 
   get id(): Bytes {
