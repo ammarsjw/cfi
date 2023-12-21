@@ -69,6 +69,7 @@ dataSources:
         - UpdateAllowedToken
         - UpdateListing
         - UpdateTreasuryWallet
+        - ActiveSale
         - BidHistory
         - SaleHistory
       abis:
