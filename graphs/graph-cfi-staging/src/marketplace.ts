@@ -22,6 +22,7 @@ import {
     UpdateAllowedToken,
     UpdateListing,
     UpdateTreasuryWallet,
+    ActiveSale,
     BidHistory,
     SaleHistory
 } from "../generated/schema"
@@ -41,21 +42,21 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
     entity.save()
 
     // {BidHistory} entity id.
-    let bidEntityId =
+    let bidHistoryEntityId =
         event.params.collection.toHexString()
-        .concat("-")
-        .concat(event.params.tokenId.toString())
-        .concat("-")
-        .concat(event.params.index.toString())
+            .concat("-")
+            .concat(event.params.tokenId.toString())
+            .concat("-")
+            .concat(event.params.index.toString())
 
     // Load {BidHistory} entity.
     let buyer = BYTES_ZERO
     let amountToken = BIGINT_ZERO
-    let bidEntity = BidHistory.load(bidEntityId)
+    let bidHistoryEntity = BidHistory.load(bidHistoryEntityId)
 
-    if (bidEntity) {
-        buyer = bidEntity.bidder
-        amountToken = bidEntity.amountToken
+    if (bidHistoryEntity) {
+        buyer = bidHistoryEntity.bidder
+        amountToken = bidHistoryEntity.amountToken
     }
 
     // Load {UpdateListing} entity.
@@ -67,19 +68,19 @@ export function handleAuctionAcceptBid(event: AuctionAcceptBidEvent): void {
     }
 
     // Create {SaleHistory} entity.
-    let saleEntity = new SaleHistory(event.transaction.hash.concatI32(event.logIndex.toI32()))
-    saleEntity.collection = event.params.collection
-    saleEntity.tokenId = event.params.tokenId
-    saleEntity.buyer = buyer
-    saleEntity.amountToken = amountToken
-    saleEntity.token = token
-    saleEntity.blockNumber = event.block.number
-    saleEntity.blockTimestamp = event.block.timestamp
-    saleEntity.transactionHash = event.transaction.hash
-    saleEntity.save()
+    let saleHistoryEntity = new SaleHistory(event.transaction.hash.concatI32(event.logIndex.toI32()))
+    saleHistoryEntity.collection = event.params.collection
+    saleHistoryEntity.tokenId = event.params.tokenId
+    saleHistoryEntity.buyer = buyer
+    saleHistoryEntity.amountToken = amountToken
+    saleHistoryEntity.token = token
+    saleHistoryEntity.blockNumber = event.block.number
+    saleHistoryEntity.blockTimestamp = event.block.timestamp
+    saleHistoryEntity.transactionHash = event.transaction.hash
+    saleHistoryEntity.save()
 
     // Remove {BidHistory} entity.
-    store.remove("BidHistory", bidEntityId)
+    store.remove("BidHistory", bidHistoryEntityId)
 }
 
 export function handleAuctionBid(event: AuctionBidEvent): void {
@@ -97,22 +98,22 @@ export function handleAuctionBid(event: AuctionBidEvent): void {
     entity.save()
 
     // Create {BidHistory} entity.
-    let bidEntity = new BidHistory(
+    let bidHistoryEntity = new BidHistory(
         event.params.collection.toHexString()
             .concat("-")
             .concat(event.params.tokenId.toString())
             .concat("-")
             .concat(event.params.index.toString())
     )
-    bidEntity.collection = event.params.collection
-    bidEntity.tokenId = event.params.tokenId
-    bidEntity.index = event.params.index
-    bidEntity.bidder = event.params.bidder
-    bidEntity.amountToken = event.params.amountToken
-    bidEntity.blockNumber = event.block.number
-    bidEntity.blockTimestamp = event.block.timestamp
-    bidEntity.transactionHash = event.transaction.hash
-    bidEntity.save()
+    bidHistoryEntity.collection = event.params.collection
+    bidHistoryEntity.tokenId = event.params.tokenId
+    bidHistoryEntity.index = event.params.index
+    bidHistoryEntity.bidder = event.params.bidder
+    bidHistoryEntity.amountToken = event.params.amountToken
+    bidHistoryEntity.blockNumber = event.block.number
+    bidHistoryEntity.blockTimestamp = event.block.timestamp
+    bidHistoryEntity.transactionHash = event.transaction.hash
+    bidHistoryEntity.save()
 }
 
 export function handleAuctionCancelBid(event: AuctionCancelBidEvent): void {
@@ -128,13 +129,14 @@ export function handleAuctionCancelBid(event: AuctionCancelBidEvent): void {
     entity.save()
 
     // Remove {BidHistory} entity.
-    let bidEntityId = event.params.collection.toHexString()
-        .concat("-")
-        .concat(event.params.tokenId.toString())
-        .concat("-")
-        .concat(event.params.index.toString())
-
-    store.remove("Bid", bidEntityId)
+    store.remove(
+        "Bid",
+        event.params.collection.toHexString()
+            .concat("-")
+            .concat(event.params.tokenId.toString())
+            .concat("-")
+            .concat(event.params.index.toString())
+    )
 }
 
 export function handleEndSale(event: EndSaleEvent): void {
@@ -147,6 +149,14 @@ export function handleEndSale(event: EndSaleEvent): void {
     entity.blockTimestamp = event.block.timestamp
     entity.transactionHash = event.transaction.hash
     entity.save()
+
+    // Remove {ActiveSale} entity.
+    store.remove(
+        "ActiveSale",
+        event.params.collection.toHexString()
+            .concat("-")
+            .concat(event.params.tokenId.toString())
+    )
 }
 
 export function handleSaleBuy(event: SaleBuyEvent): void {
@@ -163,17 +173,25 @@ export function handleSaleBuy(event: SaleBuyEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.save()
 
+    // Remove {ActiveSale} entity.
+    store.remove(
+        "ActiveSale",
+        event.params.collection.toHexString()
+            .concat("-")
+            .concat(event.params.tokenId.toString())
+    )
+
     // Create {SaleHistory} entity.
-    let saleEntity = new SaleHistory(event.transaction.hash.concatI32(event.logIndex.toI32()))
-    saleEntity.collection = event.params.collection
-    saleEntity.tokenId = event.params.tokenId
-    saleEntity.buyer = event.params.buyer
-    saleEntity.amountToken = event.params.amountToken
-    saleEntity.token = event.params.token
-    saleEntity.blockNumber = event.block.number
-    saleEntity.blockTimestamp = event.block.timestamp
-    saleEntity.transactionHash = event.transaction.hash
-    saleEntity.save()
+    let saleHistoryEntity = new SaleHistory(event.transaction.hash.concatI32(event.logIndex.toI32()))
+    saleHistoryEntity.collection = event.params.collection
+    saleHistoryEntity.tokenId = event.params.tokenId
+    saleHistoryEntity.buyer = event.params.buyer
+    saleHistoryEntity.amountToken = event.params.amountToken
+    saleHistoryEntity.token = event.params.token
+    saleHistoryEntity.blockNumber = event.block.number
+    saleHistoryEntity.blockTimestamp = event.block.timestamp
+    saleHistoryEntity.transactionHash = event.transaction.hash
+    saleHistoryEntity.save()
 }
 
 export function handleStartSale(event: StartSaleEvent): void {
@@ -190,6 +208,23 @@ export function handleStartSale(event: StartSaleEvent): void {
     entity.blockTimestamp = event.block.timestamp
     entity.transactionHash = event.transaction.hash
     entity.save()
+
+    // Create {ActiveSale} entity.
+    let activeSaleEntity = new ActiveSale(
+        event.params.collection.toHexString()
+            .concat("-")
+            .concat(event.params.tokenId.toString())
+    )
+    activeSaleEntity.collection = event.params.collection
+    activeSaleEntity.tokenId = event.params.tokenId
+    activeSaleEntity.startTime = event.params.startTime
+    activeSaleEntity.endTime = event.params.endTime
+    activeSaleEntity.duration = event.params.duration
+    activeSaleEntity.price = event.params.price
+    activeSaleEntity.blockNumber = event.block.number
+    activeSaleEntity.blockTimestamp = event.block.timestamp
+    activeSaleEntity.transactionHash = event.transaction.hash
+    activeSaleEntity.save()
 }
 
 export function handleUpdateAllowedToken(event: UpdateAllowedTokenEvent): void {

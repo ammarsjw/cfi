@@ -1,6 +1,20 @@
 # ========== Custom ========== #
 
 # Marketplace
+type ActiveSale @entity(immutable: false) {
+    id: ID!
+    collection: Bytes! # address
+    tokenId: BigInt! # uint256
+    startTime: BigInt! # uint256
+    endTime: BigInt! # uint256
+    duration: BigInt! # uint256
+    price: BigInt! # uint256
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# Marketplace
 type BidHistory @entity(immutable: false) {
     id: ID!
     collection: Bytes! # address
