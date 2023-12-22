@@ -268,12 +268,12 @@ contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Rol
 
         if (getListings[collection].startTime == 0) revert CollectionNotListed();
         if (block.timestamp <= sale.endTime) revert SaleAlreadyExists();
-        if (collection.ownerOf(tokenId) != _msgSender()) revert IncorrectOwner();
+        if (_msgSender() != collection.ownerOf(tokenId)) revert TokenIdNotOwned();
         bool isNotApproved =
             collection.getApproved(tokenId) != address(this) &&
             !collection.isApprovedForAll(_msgSender(), address(this));
 
-        if (isNotApproved) revert MissingTokenIdApproval();
+        if (isNotApproved) revert TokenIdNotApproved();
         if (duration == 0 || price < MIN_AMOUNT) revert InvalidAmount();
         sale.startTime = block.timestamp;
         sale.endTime = block.timestamp + duration;
@@ -301,7 +301,7 @@ contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Rol
 
         if (sale.startTime == 0 || block.timestamp > sale.endTime)
             revert SaleDoesNotExist();
-        if (collection.ownerOf(tokenId) == _msgSender()) revert IncorrectOwner();
+        if (_msgSender() != collection.ownerOf(tokenId)) revert TokenIdNotOwned();
 
         delete _getSales[slug];
 
@@ -400,7 +400,7 @@ contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Rol
      * @param index Unique index of the bid.
      */
     function AcceptBid(IERC721 collection, uint256 tokenId, int256 index) external {
-        if (collection.ownerOf(tokenId) == _msgSender()) revert IncorrectOwner();
+        if (_msgSender() != collection.ownerOf(tokenId)) revert TokenIdNotOwned();
         Listing memory listing = getListings[collection];
 
         if (listing.startTime == 0) revert CollectionNotListed();

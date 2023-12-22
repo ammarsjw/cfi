@@ -6,9 +6,9 @@ dataSources:
     name: CFI
     network: goerli
     source:
-      address: "0xc506A3dc972CC5F1f779Ac261E795511067Ad61d"
+      address: "0x0a7294a0C0C0E46B74C55de0eB0f816d98697504"
       abi: CFI
-      startBlock: 10076664
+      startBlock: 10251995
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -26,9 +26,9 @@ dataSources:
     name: CFIPublic
     network: goerli
     source:
-      address: "0x8301Cd43264Dc8E1D0385dF25e614cfCCc791b4D"
+      address: "0xaC2ad534eCe6Ef9827A0b0147f552513C7Ad626A"
       abi: CFIPublic
-      startBlock: 10076665
+      startBlock: 10251999
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -52,9 +52,9 @@ dataSources:
     name: Marketplace
     network: goerli
     source:
-      address: "0xeA6fA019ac006535F994046c7e57457e03d1bF59"
+      address: "0x120Fcc320C4fd5f0D8c1f18Df1b656402c3F9cC1"
       abi: Marketplace
-      startBlock: 10099125
+      startBlock: 10252000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -69,6 +69,7 @@ dataSources:
         - UpdateAllowedToken
         - UpdateListing
         - UpdateTreasuryWallet
+        - ActiveSale
         - BidHistory
         - SaleHistory
       abis:

@@ -570,6 +570,10 @@ export class ConstructorCall__Inputs {
   get initialSupply_(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
+
+  get baseURI_(): string {
+    return this._call.inputValues[2].value.toString();
+  }
 }
 
 export class ConstructorCall__Outputs {

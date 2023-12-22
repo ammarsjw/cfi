@@ -11,12 +11,12 @@ async function main() {
     if (networkName == "goerli") {
         desiredGasPrice = 1
 
-        ownerAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
+        ownerAddress = "0x6F3fDdF3B497caB73C10A314f63a72d8D9F89C1a"
         initialSupply = 250
-        cfiBaseURI = "ipfs://aaa/"
+        cfiBaseURI = "ipfs://bafybeiemxfskgv4ykxkl4y7qvvxvklj564ffmft7ygvngr4o2sa3t3yu4i/"
 
-        governorAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
-        cfiPublicBaseURI = "ipfs://aaa/"
+        governorAddress = "0x6F3fDdF3B497caB73C10A314f63a72d8D9F89C1a"
+        cfiPublicBaseURI = "ipfs://bafybeifwp32qb5rs7vauludqwvwyq56mwunbdei3wdrklism2uubzytjs4/"
 
         tokens = [
             "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"    // WETH
@@ -93,7 +93,9 @@ async function deploy(contractToDeploy, constructorArguments) {
     const contract = await hre.ethers.deployContract(contractToDeploy, constructorArguments)
     await contract.waitForDeployment()
     const contractAddress = contract.target
-    const deploymentBlockNumber = await contract.deploymentTransaction().blockNumber
+    const deploymentTxHash = await contract.deploymentTransaction().hash
+    const deploymentTx = await hre.ethers.provider.getTransactionReceipt(deploymentTxHash)
+    const deploymentBlockNumber = deploymentTx.blockNumber
     console.log(`${contractToDeploy} deployed to:`, contractAddress)
     console.log("at block number:", deploymentBlockNumber)
     return contractAddress

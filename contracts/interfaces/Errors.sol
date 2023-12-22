@@ -62,10 +62,6 @@ interface MarketplaceErrors is GenericErrorsV2 {
      */
     error IdenticalVariableReassignment();
     /**
-     * @dev Indicates an error if the caller is not the owner of the given tokenId.
-     */
-    error IncorrectOwner();
-    /**
      * @dev Indicates an error if the allowance of the `token` to bid with is
      * insufficient.
      */
@@ -108,11 +104,6 @@ interface MarketplaceErrors is GenericErrorsV2 {
      */
     error InvalidValue();
     /**
-     * @dev Indicates an error if the allowance for the given `tokenId` in the given
-     * `collection` is missing for the `Marketplace`.
-     */
-    error MissingTokenIdApproval();
-    /**
      * @dev Indicates an error if the given `tokenId` in the given `collection` is
      * already up for a sale.
      */
@@ -122,6 +113,15 @@ interface MarketplaceErrors is GenericErrorsV2 {
      * been put up for a sale.
      */
     error SaleDoesNotExist();
+    /**
+     * @dev Indicates an error if the given tokenId is not owned by the caller.
+     */
+    error TokenIdNotOwned();
+    /**
+     * @dev Indicates an error if the given `tokenId` in the given `collection` is not
+     * approved for the `Marketplace`.
+     */
+    error TokenIdNotApproved();
     /**
      * @dev Indicates an error when trying to wrap while having sufficient Wrapped ETH
      * balance.

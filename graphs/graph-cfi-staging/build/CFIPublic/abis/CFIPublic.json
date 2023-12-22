@@ -5,6 +5,11 @@
         "internalType": "address",
         "name": "governor_",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "baseURI_",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -169,6 +174,11 @@
       }
     ],
     "name": "InvalidMintQuantity",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "tokenURIAlreadyInUse",
     "type": "error"
   },
   {
@@ -555,6 +565,25 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "inUseBy",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

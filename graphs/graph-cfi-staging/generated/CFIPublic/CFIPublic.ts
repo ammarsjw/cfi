@@ -414,6 +414,25 @@ export class CFIPublic extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  inUseBy(uri: string): BigInt {
+    let result = super.call("inUseBy", "inUseBy(string):(uint256)", [
+      ethereum.Value.fromString(uri)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_inUseBy(uri: string): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("inUseBy", "inUseBy(string):(uint256)", [
+      ethereum.Value.fromString(uri)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   isApprovedForAll(owner: Address, operator: Address): boolean {
     let result = super.call(
       "isApprovedForAll",
@@ -695,6 +714,10 @@ export class ConstructorCall__Inputs {
 
   get governor_(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get baseURI_(): string {
+    return this._call.inputValues[1].value.toString();
   }
 }
 
