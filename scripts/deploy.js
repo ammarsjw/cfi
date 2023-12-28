@@ -80,6 +80,7 @@ async function checkGasPrice(desiredGasPrice) {
     let feeData = await hre.ethers.provider.getFeeData()
     let gasPrice = hre.ethers.formatUnits(feeData.gasPrice, "gwei")
     console.log("Gas Price:", gasPrice, "Gwei")
+
     while (gasPrice > desiredGasPrice) {
         feeData = await hre.ethers.provider.getFeeData()
         if (gasPrice != hre.ethers.formatUnits(feeData.gasPrice, "gwei")) {

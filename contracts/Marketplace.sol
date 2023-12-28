@@ -42,8 +42,8 @@ contract Marketplace is AccessControl, MarketplaceErrors, LinkedListStorage, Rol
     uint256 public constant MIN_AMOUNT = 0.000000001 * 1e18;
     /// @notice Percentage increase needed from the highest bid - magnified by 1e3.
     uint256 public constant PERCENTAGE_INCREASE = 0.1 * 1e3;
-    /// @notice Percentage tax when an NFT is bought.
-    uint256 public constant PERCENTAGE_TAX = 0.5 * 1e3;
+    /// @notice Percentage tax when an NFT is bought - magnified by 1e3.
+    uint256 public constant PERCENTAGE_TAX = 20 * 1e3;
 
     /// @notice Address of the tax collector wallet;
     address public treasuryWallet;
