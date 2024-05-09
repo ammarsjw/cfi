@@ -24,6 +24,22 @@ async function main() {
         priceFeeds = [
             "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"    // WETH
         ]
+    } if (networkName == "sepolia") {
+        desiredGasPrice = 10
+
+        ownerAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
+        initialSupply = 500
+        cfiBaseURI = "ipfs://bafybeiemxfskgv4ykxkl4y7qvvxvklj564ffmft7ygvngr4o2sa3t3yu4i/"
+
+        governorAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
+        cfiPublicBaseURI = "ipfs://bafybeifwp32qb5rs7vauludqwvwyq56mwunbdei3wdrklism2uubzytjs4/"
+
+        tokens = [
+            ""    // WETH
+        ]
+        priceFeeds = [
+            ""    // WETH
+        ]
     } else if (networkName == "bsc") {
         desiredGasPrice = 3
 

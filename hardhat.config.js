@@ -21,6 +21,10 @@ module.exports = {
             url: process.env.URL_GOERLI,
             accounts: [process.env.PRIVATE_KEY_GOERLI],
         },
+        sepolia: {
+            url: process.env.URL_SEPOLIA,
+            accounts: [process.env.PRIVATE_KEY_SEPOLIA],
+        },
         bsc: {
             url: process.env.URL_BSC,
             accounts: [process.env.PRIVATE_KEY_BSC],
@@ -29,6 +33,7 @@ module.exports = {
     etherscan: {
         apiKey: {
             goerli: process.env.BLOCK_EXPLORER_API_KEY_ETHEREUM,
+            sepolia: process.env.BLOCK_EXPLORER_API_KEY_ETHEREUM,
             bsc: process.env.BLOCK_EXPLORER_API_KEY_BSC,
         },
     },
