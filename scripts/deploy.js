@@ -24,7 +24,7 @@ async function main() {
         priceFeeds = [
             "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"    // WETH
         ]
-    } if (networkName == "sepolia") {
+    } else if (networkName == "sepolia") {
         desiredGasPrice = 10
 
         ownerAddress = "0x45faf7923BAb5A5380515E055CA700519B3e4705"
